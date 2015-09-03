@@ -1,11 +1,15 @@
 #ifndef _MEMORY_CHECKER_H_
 #define _MEMORY_CHECKER_H_
+#include "MemoryChecker.h"
+#include <stdio.h>
+#include <malloc.h>
+#include <string.h>
 
 typedef struct mem_list_s
 {
 	void* pMem;
-	ssize_t m_nSize;
-	char m_szFilename[256];
+	size_t m_nSize;
+	char m_szFileName[256];
 	int m_nLine;
 	struct mem_list_s* pNext;
 } mem_list_t;
@@ -25,10 +29,12 @@ private:
 	int m_iTotal;
 };
 
-void* operator new(size_t size, const char* szFile, int nline);
-void operator delete(void* ptr, const char* szFile, int nline);
-void operator delete(void *ptr);
-void* operator new[](size_t size, const char* szFile, int nline);
-void operator delete[](void* ptr, const char* szFile, int nline);
-void operator delete[](void* ptr);
+//void* operator new(size_t size);
+void* operator new(size_t size, const char* szFile, const int nline);
+void operator delete(void* ptr, const char* szFile, const int nline);
+//void operator delete(void *ptr);
+//void* operator new[](size_t size);
+void* operator new[](size_t size, const char* szFile, const int nline);
+void operator delete[](void* ptr, const char* szFile, const int nline);
+//void operator delete[](void* ptr);
 #endif

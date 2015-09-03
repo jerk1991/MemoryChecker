@@ -5,7 +5,7 @@
 
 MemManager::MemManager() {
 	m_pMem_list_header = NULL;
-	m_iTotal = NULL;
+	m_iTotal = 0;
 }
 
 MemManager::~MemManager() {}
@@ -40,7 +40,7 @@ void MemManager::Dump() {
 	mem_list_t* pp = m_pMem_list_header;
 	while(pp) {
 		printf("File is %s\n",pp->m_szFileName);
-		printf("Size is %d\n",pp->m_nSize);
+		printf("Size is %lu\n",pp->m_nSize);
 		printf("Line is %d\n",pp->m_nLine);
 		pp = pp->pNext;
 	}
@@ -52,6 +52,7 @@ void PutEntry(void *ptr, int size, const char* szFile, int nLine) {
 		strcpy(p->m_szFileName,szFile);
 		p->pMem = ptr;
 		p->m_nSize = size;
+		p->m_nLine = nLine;
 		MemManager::GetInstance()->Append(p);
 	}
 }
@@ -59,39 +60,49 @@ void PutEntry(void *ptr, int size, const char* szFile, int nLine) {
 void RemoveEntry(void *ptr) {
 	MemManager::GetInstance()->Remove(ptr);
 }
+/*void* operator new(size_t size) {
+	void *ptr = malloc(size);
+	PutEntry(ptr,size);
+	return ptr;
+}*/
 
-void operator new(size_t size, const char* szFile, int nLine) {
+void* operator new(size_t size, const char* szFile, const int nLine) {
 	void * ptr = malloc(size);
 	PutEntry(ptr,size,szFile,nLine);
 	return ptr;
 }
 
-void operator delete(void *ptr) {
+/*void operator delete(void *ptr) {
 	RemoveEntry(ptr);
 	//free(ptr);
-}
+}*/
 
-void *operator new[](size_t size,const char* szFile,int nLine) {
+/*void *operator new[](size_t size) {
+	void *ptr = malloc(size);
+	PutEntry(ptr,size);
+	return ptr;
+}*/
+void *operator new[](size_t size,const char* szFile,const int nLine) {
 	void * ptr = malloc(size);
 	PutEntry(ptr,size,szFile,nLine);
 	return ptr;
 }
 
-void operator delete[](void *ptr,const char* szFile,int nLine) {
+void operator delete[](void *ptr,const char* szFile,const int nLine) {
 	RemoveEntry(ptr);
 	//free(ptr);
 }
 
-void operator delete(void *ptr,const char* szFile,int nLine) {
+void operator delete(void *ptr,const char* szFile,const int nLine) {
 	RemoveEntry(ptr);
 }
 
-#define new new(__FILE__, __LINE__)
+//#define new DEBUG_NEW
+//#define DEBUG_NEW new(__FILE__, __LINE__)
 
-MemManager m_memTracer;
-
+MemManager memTracer;
 MemManager* MemManager::GetInstance() {
-	return &m_memTracer;
+	return &memTracer;
 }
 
 
