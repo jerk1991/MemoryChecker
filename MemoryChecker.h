@@ -4,7 +4,7 @@
 typedef struct mem_list_s
 {
 	void* pMem;
-	ssize_t m_nsize;
+	ssize_t m_nSize;
 	char m_szFilename[256];
 	int m_nLine;
 	struct mem_list_s* pNext;
@@ -30,5 +30,5 @@ void operator delete(void* ptr, const char* szFile, int nline);
 void operator delete(void *ptr);
 void* operator new[](size_t size, const char* szFile, int nline);
 void operator delete[](void* ptr, const char* szFile, int nline);
-void operator delete[](void* ptr);ß
+void operator delete[](void* ptr);
 #endif
