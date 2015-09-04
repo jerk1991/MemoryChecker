@@ -60,10 +60,17 @@ void PutEntry(void *ptr, int size, const char* szFile, int nLine) {
 void RemoveEntry(void *ptr) {
 	MemManager::GetInstance()->Remove(ptr);
 }
+
 /*void* operator new(size_t size) {
 	void *ptr = malloc(size);
 	PutEntry(ptr,size);
 	return ptr;
+}*/
+
+/*void* operator new[](size_t size) {
+	void *ptr = malloc(size);
+	PutEntry(ptr,size);
+	return ptr;	
 }*/
 
 void* operator new(size_t size, const char* szFile, const int nLine) {
@@ -72,28 +79,26 @@ void* operator new(size_t size, const char* szFile, const int nLine) {
 	return ptr;
 }
 
-/*void operator delete(void *ptr) {
-	RemoveEntry(ptr);
-	//free(ptr);
-}*/
-
-/*void *operator new[](size_t size) {
-	void *ptr = malloc(size);
-	PutEntry(ptr,size);
-	return ptr;
-}*/
 void *operator new[](size_t size,const char* szFile,const int nLine) {
 	void * ptr = malloc(size);
 	PutEntry(ptr,size,szFile,nLine);
 	return ptr;
 }
 
-void operator delete[](void *ptr,const char* szFile,const int nLine) {
+void operator delete(void *ptr) {
 	RemoveEntry(ptr);
 	//free(ptr);
 }
 
+void operator delete[](void *ptr) {
+	RemoveEntry(ptr);
+}
+
 void operator delete(void *ptr,const char* szFile,const int nLine) {
+	RemoveEntry(ptr);
+}
+
+void operator delete[](void *ptr,const char* szFile,const int nLine) {
 	RemoveEntry(ptr);
 }
 

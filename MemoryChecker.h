@@ -30,11 +30,11 @@ private:
 };
 
 //void* operator new(size_t size);
-void* operator new(size_t size, const char* szFile, const int nline);
-void operator delete(void* ptr, const char* szFile, const int nline);
-//void operator delete(void *ptr);
 //void* operator new[](size_t size);
-void* operator new[](size_t size, const char* szFile, const int nline);
+void* operator new(size_t size, const char* szFile, const int nline);
+void* operator new[](size_t size, const char* szFile,const int nline);
+void operator delete(void* ptr);
+void operator delete[](void* ptr);
+void operator delete(void* ptr, const char* szFile, const int nline);
 void operator delete[](void* ptr, const char* szFile, const int nline);
-//void operator delete[](void* ptr);
 #endif
